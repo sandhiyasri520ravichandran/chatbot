@@ -25,10 +25,9 @@ app.layout = html.Div(
         "height": "100vh",
         "display": "flex",
         "flexDirection": "column",
-        "background": "linear-gradient(120deg, #3b8d99, #6b93d6)",  # Gradient background
+        "background": "linear-gradient(120deg, #3b8d99, #6b93d6)",  
     },
     children=[
-        # Chat Window
         html.Div(
             id="chat-window",
             style={
@@ -48,13 +47,12 @@ app.layout = html.Div(
                 "alignItems": "center",
                 "padding": "10px 20px",
                 "backgroundColor": "rgba(255, 255, 255, 0.9)",
-                "boxShadow": "0 -4px 10px rgba(0, 0, 0, 0.1)",  # Top shadow for separation
+                "boxShadow": "0 -4px 10px rgba(0, 0, 0, 0.1)",  
                 "position": "sticky",
                 "bottom": "0",
                 "width": "100%",
             },
             children=[
-                # Input Box
                 dbc.Input(
                     id="user-input",
                     placeholder="Type your message...",
@@ -68,7 +66,6 @@ app.layout = html.Div(
                         "padding": "10px",
                     },
                 ),
-                # Send Button
                 dbc.Button(
                     "Send",
                     id="send-button",
@@ -82,7 +79,6 @@ app.layout = html.Div(
                     },
                     n_clicks=0,
                 ),
-                # File Upload Button
                 dcc.Upload(
                     id="upload-csv",
                     children=dbc.Button(
