@@ -10,12 +10,9 @@ import io
 import PIL.Image
 import tempfile
 import csv
-from reportlab.lib.pagesizes import letter
-from reportlab.lib.units import inch
-from reportlab.pdfgen import canvas
 from pathlib import Path
 
-app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP,
+app = Dash(_name_, external_stylesheets=[dbc.themes.BOOTSTRAP,
                                            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css",
 ])
 app.title = "Chatbot Generating graph"
@@ -25,9 +22,10 @@ app.layout = html.Div(
         "height": "100vh",
         "display": "flex",
         "flexDirection": "column",
-        "background": "linear-gradient(120deg, #3b8d99, #6b93d6)",  
+        "background": "linear-gradient(120deg, #3b8d99, #6b93d6)", 
     },
     children=[
+        # Chat Window
         html.Div(
             id="chat-window",
             style={
@@ -37,7 +35,7 @@ app.layout = html.Div(
                 "borderRadius": "15px",
                 "margin": "20px auto",
                 "boxShadow": "0 4px 15px rgba(0, 0, 0, 0.2)",
-                "backgroundColor": "blue",  
+                "backgroundColor": "light blue",  
             },
         ),
         
@@ -47,12 +45,13 @@ app.layout = html.Div(
                 "alignItems": "center",
                 "padding": "10px 20px",
                 "backgroundColor": "rgba(255, 255, 255, 0.9)",
-                "boxShadow": "0 -4px 10px rgba(0, 0, 0, 0.1)",  
+                "boxShadow": "0 -4px 10px rgba(0, 0, 0, 0.1)",  # Top shadow for separation
                 "position": "sticky",
                 "bottom": "0",
                 "width": "100%",
             },
             children=[
+                # Input Box
                 dbc.Input(
                     id="user-input",
                     placeholder="Type your message...",
@@ -66,6 +65,7 @@ app.layout = html.Div(
                         "padding": "10px",
                     },
                 ),
+                # Send Button
                 dbc.Button(
                     "Send",
                     id="send-button",
@@ -79,10 +79,11 @@ app.layout = html.Div(
                     },
                     n_clicks=0,
                 ),
+                # File Upload Button
                 dcc.Upload(
                     id="upload-csv",
                     children=dbc.Button(
-                        html.I(className="fas fa-upload"),  # Icon for upload
+                        html.I(className="fas fa-upload" ),  # Icon for upload
                         style={
                             "backgroundColor": "#6b93d6",
                             "color": "white",
@@ -101,40 +102,6 @@ app.layout = html.Div(
 
 
 conversation_history = []
-
-def csv_to_pdf(csv_filepath, pdf_filepath):
-    """Converts a CSV file to a PDF file."""
-    try:
-        with open(csv_filepath, 'r', encoding='utf-8') as csvfile:
-            reader = csv.reader(csvfile)
-            header = next(reader)
-            data = list(reader)
-        c = canvas.Canvas(pdf_filepath, pagesize=letter)
-        width, height = letter
-        c.setFont("Helvetica", 12)
-        x = 0.5 * inch
-        y = height - 0.5 * inch
-        for col in header:
-            c.drawString(x, y, col)
-            x += 1.5 * inch
-        c.showPage()
-        x = 0.5 * inch
-        y = height - 0.5 * inch
-        for row in data:
-            x = 0.5 * inch
-            for col in row:
-                c.drawString(x, y, col)
-                x += 1.5 * inch
-            y -= 0.25 * inch 
-            if y < 1 * inch:
-                c.showPage()
-                y = height - 0.5 * inch
-        c.save()
-        print(f"CSV converted to PDF successfully: {pdf_filepath}")
-    except FileNotFoundError:
-        print(f"Error: CSV file not found: {csv_filepath}")
-    except Exception as e:
-        print(f"An error occurred: {e}")
 
 def bot_response(user_message):
     print(os.environ.get("GEMINI_API_KEY"))
@@ -155,10 +122,9 @@ def bot_response(user_message):
         chat_session = model.start_chat()
         response = chat_session.send_message(user_message)
         return response.text
-
     elif user_message == "what does this graph specifies":
-        media = Path(r'C:\Users\sandh\Downloads')
-        sample_pdf = genai.upload_file(media / 'newplot (2).png')
+        media = Path(r'C:\Users\shankaripriya s\Downloads')
+        sample_pdf = genai.upload_file(media / 'newplot (10).png')
         response3 = model.generate_content(["Give me a summary of this file.", sample_pdf])
         return response3.text
     else:
@@ -251,5 +217,5 @@ def update_chat(n_clicks, uploaded_file, user_message, chat_history):
 
     return chat_history, ""
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     app.run_server(debug=True)
