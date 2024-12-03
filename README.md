@@ -1,4 +1,4 @@
-                                                            Chatbot with Graph Generation
+                                                   Chatbot with Graph Generation
 
 Overview:
 This project is an interactive chatbot application that incorporates a visually appealing user interface and functionality to generate graphs from uploaded CSV files. It leverages Dash for web-based visualization, Plotly for creating graphs, and Google Generative AI for intelligent chatbot responses.
